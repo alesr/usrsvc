@@ -1,0 +1,27 @@
+version: '3'
+services:
+  db:
+    image: postgres:15-alpine
+    networks:
+      - backend
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: user
+      POSTGRES_DB: usrsvc
+      port: 5432
+  usrsvc:
+    build:
+      context: ..
+      dockerfile: build/Dockerfile
+    networks:
+      - backend
+    ports:
+      - "50051:50051"
+    depends_on:
+      - db
+    command: ./wait-for-it.sh db:5432 -- ./usrsvc
+
+networks:
+  backend:
