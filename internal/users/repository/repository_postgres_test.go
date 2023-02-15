@@ -108,7 +108,10 @@ func TestGetByCountry(t *testing.T) {
 		require.NoError(t, actualErr)
 
 		// Assert
-		require.Equal(t, givenUsers, actualUsers)
+
+		require.Len(t, actualUsers, 2)
+		assert.Contains(t, actualUsers, givenUsers[0])
+		assert.Contains(t, actualUsers, givenUsers[1])
 	})
 
 	t.Run("empty list", func(t *testing.T) {
