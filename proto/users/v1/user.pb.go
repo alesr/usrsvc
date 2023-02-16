@@ -21,6 +21,55 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type HealthCheckResponse_ServingStatus int32
+
+const (
+	HealthCheckResponse_UNKNOWN     HealthCheckResponse_ServingStatus = 0
+	HealthCheckResponse_SERVING     HealthCheckResponse_ServingStatus = 1
+	HealthCheckResponse_NOT_SERVING HealthCheckResponse_ServingStatus = 2
+)
+
+// Enum value maps for HealthCheckResponse_ServingStatus.
+var (
+	HealthCheckResponse_ServingStatus_name = map[int32]string{
+		0: "UNKNOWN",
+		1: "SERVING",
+		2: "NOT_SERVING",
+	}
+	HealthCheckResponse_ServingStatus_value = map[string]int32{
+		"UNKNOWN":     0,
+		"SERVING":     1,
+		"NOT_SERVING": 2,
+	}
+)
+
+func (x HealthCheckResponse_ServingStatus) Enum() *HealthCheckResponse_ServingStatus {
+	p := new(HealthCheckResponse_ServingStatus)
+	*p = x
+	return p
+}
+
+func (x HealthCheckResponse_ServingStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (HealthCheckResponse_ServingStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_proto_users_v1_user_proto_enumTypes[0].Descriptor()
+}
+
+func (HealthCheckResponse_ServingStatus) Type() protoreflect.EnumType {
+	return &file_proto_users_v1_user_proto_enumTypes[0]
+}
+
+func (x HealthCheckResponse_ServingStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use HealthCheckResponse_ServingStatus.Descriptor instead.
+func (HealthCheckResponse_ServingStatus) EnumDescriptor() ([]byte, []int) {
+	return file_proto_users_v1_user_proto_rawDescGZIP(), []int{12, 0}
+}
+
 type User struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -697,6 +746,100 @@ func (x *ListUsersResponse) GetNextPageToken() string {
 	return ""
 }
 
+type HealthCheckRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Service string `protobuf:"bytes,1,opt,name=service,proto3" json:"service,omitempty"`
+}
+
+func (x *HealthCheckRequest) Reset() {
+	*x = HealthCheckRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_users_v1_user_proto_msgTypes[11]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *HealthCheckRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HealthCheckRequest) ProtoMessage() {}
+
+func (x *HealthCheckRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_users_v1_user_proto_msgTypes[11]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HealthCheckRequest.ProtoReflect.Descriptor instead.
+func (*HealthCheckRequest) Descriptor() ([]byte, []int) {
+	return file_proto_users_v1_user_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *HealthCheckRequest) GetService() string {
+	if x != nil {
+		return x.Service
+	}
+	return ""
+}
+
+type HealthCheckResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Status HealthCheckResponse_ServingStatus `protobuf:"varint,1,opt,name=status,proto3,enum=HealthCheckResponse_ServingStatus" json:"status,omitempty"`
+}
+
+func (x *HealthCheckResponse) Reset() {
+	*x = HealthCheckResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_users_v1_user_proto_msgTypes[12]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *HealthCheckResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HealthCheckResponse) ProtoMessage() {}
+
+func (x *HealthCheckResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_users_v1_user_proto_msgTypes[12]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HealthCheckResponse.ProtoReflect.Descriptor instead.
+func (*HealthCheckResponse) Descriptor() ([]byte, []int) {
+	return file_proto_users_v1_user_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *HealthCheckResponse) GetStatus() HealthCheckResponse_ServingStatus {
+	if x != nil {
+		return x.Status
+	}
+	return HealthCheckResponse_UNKNOWN
+}
+
 var File_proto_users_v1_user_proto protoreflect.FileDescriptor
 
 var file_proto_users_v1_user_proto_rawDesc = []byte{
@@ -772,7 +915,19 @@ var file_proto_users_v1_user_proto_rawDesc = []byte{
 	0x28, 0x0b, 0x32, 0x05, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x52, 0x05, 0x75, 0x73, 0x65, 0x72, 0x73,
 	0x12, 0x26, 0x0a, 0x0f, 0x6e, 0x65, 0x78, 0x74, 0x5f, 0x70, 0x61, 0x67, 0x65, 0x5f, 0x74, 0x6f,
 	0x6b, 0x65, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0d, 0x6e, 0x65, 0x78, 0x74, 0x50,
-	0x61, 0x67, 0x65, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x32, 0x9e, 0x02, 0x0a, 0x0b, 0x55, 0x73, 0x65,
+	0x61, 0x67, 0x65, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x22, 0x2e, 0x0a, 0x12, 0x48, 0x65, 0x61, 0x6c,
+	0x74, 0x68, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x18,
+	0x0a, 0x07, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x07, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x22, 0x8d, 0x01, 0x0a, 0x13, 0x48, 0x65, 0x61,
+	0x6c, 0x74, 0x68, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x3a, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e,
+	0x32, 0x22, 0x2e, 0x48, 0x65, 0x61, 0x6c, 0x74, 0x68, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x6e, 0x67, 0x53, 0x74,
+	0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x22, 0x3a, 0x0a, 0x0d,
+	0x53, 0x65, 0x72, 0x76, 0x69, 0x6e, 0x67, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x0b, 0x0a,
+	0x07, 0x55, 0x4e, 0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x10, 0x00, 0x12, 0x0b, 0x0a, 0x07, 0x53, 0x45,
+	0x52, 0x56, 0x49, 0x4e, 0x47, 0x10, 0x01, 0x12, 0x0f, 0x0a, 0x0b, 0x4e, 0x4f, 0x54, 0x5f, 0x53,
+	0x45, 0x52, 0x56, 0x49, 0x4e, 0x47, 0x10, 0x02, 0x32, 0xd9, 0x02, 0x0a, 0x0b, 0x55, 0x73, 0x65,
 	0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x2e, 0x0a, 0x07, 0x47, 0x65, 0x74, 0x55,
 	0x73, 0x65, 0x72, 0x12, 0x0f, 0x2e, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71,
 	0x75, 0x65, 0x73, 0x74, 0x1a, 0x10, 0x2e, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65,
@@ -790,10 +945,13 @@ var file_proto_users_v1_user_proto_rawDesc = []byte{
 	0x65, 0x22, 0x00, 0x12, 0x34, 0x0a, 0x09, 0x4c, 0x69, 0x73, 0x74, 0x55, 0x73, 0x65, 0x72, 0x73,
 	0x12, 0x11, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x55, 0x73, 0x65, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75,
 	0x65, 0x73, 0x74, 0x1a, 0x12, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x55, 0x73, 0x65, 0x72, 0x73, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0x22, 0x5a, 0x20, 0x67, 0x69, 0x74,
-	0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x61, 0x6c, 0x65, 0x73, 0x72, 0x2f, 0x75, 0x73,
-	0x72, 0x73, 0x76, 0x63, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x76, 0x31, 0x62, 0x06, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x39, 0x0a, 0x0a, 0x43, 0x68, 0x65,
+	0x63, 0x6b, 0x48, 0x65, 0x61, 0x74, 0x68, 0x12, 0x13, 0x2e, 0x48, 0x65, 0x61, 0x6c, 0x74, 0x68,
+	0x43, 0x68, 0x65, 0x63, 0x6b, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x14, 0x2e, 0x48,
+	0x65, 0x61, 0x6c, 0x74, 0x68, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x22, 0x00, 0x42, 0x22, 0x5a, 0x20, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63,
+	0x6f, 0x6d, 0x2f, 0x61, 0x6c, 0x65, 0x73, 0x72, 0x2f, 0x75, 0x73, 0x72, 0x73, 0x76, 0x63, 0x2f,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -808,43 +966,50 @@ func file_proto_users_v1_user_proto_rawDescGZIP() []byte {
 	return file_proto_users_v1_user_proto_rawDescData
 }
 
-var file_proto_users_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_proto_users_v1_user_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_proto_users_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_proto_users_v1_user_proto_goTypes = []interface{}{
-	(*User)(nil),                  // 0: User
-	(*GetUserRequest)(nil),        // 1: GetUserRequest
-	(*GetUserResponse)(nil),       // 2: GetUserResponse
-	(*CreateUserRequest)(nil),     // 3: CreateUserRequest
-	(*CreateUserResponse)(nil),    // 4: CreateUserResponse
-	(*UpdateUserRequest)(nil),     // 5: UpdateUserRequest
-	(*UpdateUserResponse)(nil),    // 6: UpdateUserResponse
-	(*DeleteUserRequest)(nil),     // 7: DeleteUserRequest
-	(*DeleteUserResponse)(nil),    // 8: DeleteUserResponse
-	(*ListUsersRequest)(nil),      // 9: ListUsersRequest
-	(*ListUsersResponse)(nil),     // 10: ListUsersResponse
-	(*timestamppb.Timestamp)(nil), // 11: google.protobuf.Timestamp
+	(HealthCheckResponse_ServingStatus)(0), // 0: HealthCheckResponse.ServingStatus
+	(*User)(nil),                           // 1: User
+	(*GetUserRequest)(nil),                 // 2: GetUserRequest
+	(*GetUserResponse)(nil),                // 3: GetUserResponse
+	(*CreateUserRequest)(nil),              // 4: CreateUserRequest
+	(*CreateUserResponse)(nil),             // 5: CreateUserResponse
+	(*UpdateUserRequest)(nil),              // 6: UpdateUserRequest
+	(*UpdateUserResponse)(nil),             // 7: UpdateUserResponse
+	(*DeleteUserRequest)(nil),              // 8: DeleteUserRequest
+	(*DeleteUserResponse)(nil),             // 9: DeleteUserResponse
+	(*ListUsersRequest)(nil),               // 10: ListUsersRequest
+	(*ListUsersResponse)(nil),              // 11: ListUsersResponse
+	(*HealthCheckRequest)(nil),             // 12: HealthCheckRequest
+	(*HealthCheckResponse)(nil),            // 13: HealthCheckResponse
+	(*timestamppb.Timestamp)(nil),          // 14: google.protobuf.Timestamp
 }
 var file_proto_users_v1_user_proto_depIdxs = []int32{
-	11, // 0: User.created_at:type_name -> google.protobuf.Timestamp
-	11, // 1: User.updated_at:type_name -> google.protobuf.Timestamp
-	0,  // 2: GetUserResponse.user:type_name -> User
-	0,  // 3: CreateUserResponse.user:type_name -> User
-	0,  // 4: UpdateUserResponse.user:type_name -> User
-	0,  // 5: ListUsersResponse.users:type_name -> User
-	1,  // 6: UserService.GetUser:input_type -> GetUserRequest
-	3,  // 7: UserService.CreateUser:input_type -> CreateUserRequest
-	5,  // 8: UserService.UpdateUser:input_type -> UpdateUserRequest
-	7,  // 9: UserService.DeleteUser:input_type -> DeleteUserRequest
-	9,  // 10: UserService.ListUsers:input_type -> ListUsersRequest
-	2,  // 11: UserService.GetUser:output_type -> GetUserResponse
-	4,  // 12: UserService.CreateUser:output_type -> CreateUserResponse
-	6,  // 13: UserService.UpdateUser:output_type -> UpdateUserResponse
-	8,  // 14: UserService.DeleteUser:output_type -> DeleteUserResponse
-	10, // 15: UserService.ListUsers:output_type -> ListUsersResponse
-	11, // [11:16] is the sub-list for method output_type
-	6,  // [6:11] is the sub-list for method input_type
-	6,  // [6:6] is the sub-list for extension type_name
-	6,  // [6:6] is the sub-list for extension extendee
-	0,  // [0:6] is the sub-list for field type_name
+	14, // 0: User.created_at:type_name -> google.protobuf.Timestamp
+	14, // 1: User.updated_at:type_name -> google.protobuf.Timestamp
+	1,  // 2: GetUserResponse.user:type_name -> User
+	1,  // 3: CreateUserResponse.user:type_name -> User
+	1,  // 4: UpdateUserResponse.user:type_name -> User
+	1,  // 5: ListUsersResponse.users:type_name -> User
+	0,  // 6: HealthCheckResponse.status:type_name -> HealthCheckResponse.ServingStatus
+	2,  // 7: UserService.GetUser:input_type -> GetUserRequest
+	4,  // 8: UserService.CreateUser:input_type -> CreateUserRequest
+	6,  // 9: UserService.UpdateUser:input_type -> UpdateUserRequest
+	8,  // 10: UserService.DeleteUser:input_type -> DeleteUserRequest
+	10, // 11: UserService.ListUsers:input_type -> ListUsersRequest
+	12, // 12: UserService.CheckHeath:input_type -> HealthCheckRequest
+	3,  // 13: UserService.GetUser:output_type -> GetUserResponse
+	5,  // 14: UserService.CreateUser:output_type -> CreateUserResponse
+	7,  // 15: UserService.UpdateUser:output_type -> UpdateUserResponse
+	9,  // 16: UserService.DeleteUser:output_type -> DeleteUserResponse
+	11, // 17: UserService.ListUsers:output_type -> ListUsersResponse
+	13, // 18: UserService.CheckHeath:output_type -> HealthCheckResponse
+	13, // [13:19] is the sub-list for method output_type
+	7,  // [7:13] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_proto_users_v1_user_proto_init() }
@@ -985,19 +1150,44 @@ func file_proto_users_v1_user_proto_init() {
 				return nil
 			}
 		}
+		file_proto_users_v1_user_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*HealthCheckRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_users_v1_user_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*HealthCheckResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_proto_users_v1_user_proto_rawDesc,
-			NumEnums:      0,
-			NumMessages:   11,
+			NumEnums:      1,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_proto_users_v1_user_proto_goTypes,
 		DependencyIndexes: file_proto_users_v1_user_proto_depIdxs,
+		EnumInfos:         file_proto_users_v1_user_proto_enumTypes,
 		MessageInfos:      file_proto_users_v1_user_proto_msgTypes,
 	}.Build()
 	File_proto_users_v1_user_proto = out.File

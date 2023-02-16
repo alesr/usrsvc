@@ -67,10 +67,25 @@ message ListUsersResponse {
   string next_page_token = 2;
 }
 
+
+message HealthCheckRequest {
+  string service = 1;
+}
+
+message HealthCheckResponse {
+  enum ServingStatus {
+    UNKNOWN = 0;
+    SERVING = 1;
+    NOT_SERVING = 2;
+  }
+  ServingStatus status = 1;
+}
+
 service UserService {
   rpc GetUser (GetUserRequest) returns (GetUserResponse) {}
   rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {}
   rpc UpdateUser (UpdateUserRequest) returns (UpdateUserResponse) {}
   rpc DeleteUser (DeleteUserRequest) returns (DeleteUserResponse) {}
   rpc ListUsers (ListUsersRequest) returns (ListUsersResponse) {}
+  rpc CheckHeath(HealthCheckRequest) returns (HealthCheckResponse) {}
 }

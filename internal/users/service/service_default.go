@@ -29,6 +29,7 @@ type repo interface {
 	Insert(ctx context.Context, user *repository.User) error
 	Update(ctx context.Context, user *repository.User) error
 	Delete(ctx context.Context, id string) error
+	CheckDatabaseHealth(ctx context.Context) error
 }
 
 // ServiceDefault is the default implementation of the service interface.
@@ -209,6 +210,16 @@ func (s *ServiceDefault) Delete(ctx context.Context, id string) error {
 
 	if s.publisher != nil {
 		s.publisher.Publish(events.UserDeleted, id)
+	}
+	return nil
+}
+
+func (s *ServiceDefault) CheckServiceHealth(ctx context.Context) error {
+	ctx, cancel := context.WithTimeout(ctx, dbTimeout)
+	defer cancel()
+
+	if err := s.repo.CheckDatabaseHealth(ctx); err != nil {
+		return fmt.Errorf("could not check database health: %w", err)
 	}
 	return nil
 }

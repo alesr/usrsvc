@@ -25,6 +25,7 @@ type userService interface {
 	Create(ctx context.Context, user *service.User) (*service.User, error)
 	Update(ctx context.Context, user *service.User) (*service.User, error)
 	Delete(ctx context.Context, id string) error
+	CheckServiceHealth(ctx context.Context) error
 }
 
 // GRPCServer is the gRPC server that provides the user service.
@@ -208,6 +209,21 @@ func (s *GRPCServer) DeleteUser(ctx context.Context, req *apiv1.DeleteUserReques
 	}
 
 	return &apiv1.DeleteUserResponse{}, nil
+}
+
+// CheckHeath checks the health of the application going all the way down to the database.
+func (s *GRPCServer) CheckHeath(ctx context.Context, req *apiv1.HealthCheckRequest) (*apiv1.HealthCheckResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, ctxTimeout)
+	defer cancel()
+
+	if err := s.service.CheckServiceHealth(ctx); err != nil {
+		return &apiv1.HealthCheckResponse{
+			Status: apiv1.HealthCheckResponse_NOT_SERVING,
+		}, nil
+	}
+	return &apiv1.HealthCheckResponse{
+		Status: apiv1.HealthCheckResponse_SERVING,
+	}, nil
 }
 
 func newUserResponseFromDomain(user *service.User) *apiv1.User {

@@ -155,3 +155,10 @@ func (p *Postgres) Delete(ctx context.Context, id string) error {
 	}
 	return nil
 }
+
+func (p *Postgres) CheckDatabaseHealth(ctx context.Context) error {
+	if err := p.db.PingContext(ctx); err != nil {
+		return fmt.Errorf("could not ping database: %w", err)
+	}
+	return nil
+}
