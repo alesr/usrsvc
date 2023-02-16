@@ -16,9 +16,9 @@ import (
 const (
 	ctxTimeout      time.Duration = 5 * time.Second
 	defaultPageSize int32         = 100
-	defaultCursor   string        = ""
 )
 
+// userService is the interface that provides the business logic for the gRPC server.
 type userService interface {
 	Fetch(ctx context.Context, id string) (*service.User, error)
 	FetchAll(ctx context.Context, filter service.FilterParams, pag service.PaginationParams) ([]*service.User, error)
@@ -27,12 +27,14 @@ type userService interface {
 	Delete(ctx context.Context, id string) error
 }
 
+// GRPCServer is the gRPC server that provides the user service.
 type GRPCServer struct {
 	apiv1.UnimplementedUserServiceServer
 	logger  *zap.Logger
 	service userService
 }
 
+// NewGRPCServer creates a new gRPC server.
 func NewGRPCServer(logger *zap.Logger, service userService) *GRPCServer {
 	return &GRPCServer{
 		logger:  logger,
@@ -40,12 +42,13 @@ func NewGRPCServer(logger *zap.Logger, service userService) *GRPCServer {
 	}
 }
 
-// Register the GRPCServer to a gRPC server
+// Register registers the gRPC server to (our) GRPCServer.
 func (s *GRPCServer) Register(server *grpc.Server) {
 	apiv1.RegisterUserServiceServer(server, s)
 	log.Println("Registered GRPCServer to gRPC server")
 }
 
+// GetUser returns a user by ID.
 func (s *GRPCServer) CreateUser(ctx context.Context, req *apiv1.CreateUserRequest) (*apiv1.CreateUserResponse, error) {
 	if err := validateCreateUserRequest(req); err != nil {
 		s.logger.Error("failed to validate request", zap.Error(err))
@@ -69,11 +72,14 @@ func (s *GRPCServer) CreateUser(ctx context.Context, req *apiv1.CreateUserReques
 		s.logger.Error("failed to create user", zap.Error(err))
 		return nil, convertServiceError(err)
 	}
+
 	return &apiv1.CreateUserResponse{
 		User: newUserResponseFromDomain(user),
 	}, nil
 }
 
+// UpdateUser updates a user by ID.
+// For the sake of simplicity, we update all the fields of the user but the ID.
 func (s *GRPCServer) UpdateUser(ctx context.Context, req *apiv1.UpdateUserRequest) (*apiv1.UpdateUserResponse, error) {
 	if err := validateUpdateUserRequest(req); err != nil {
 		s.logger.Error("failed to validate request", zap.Error(err))
@@ -104,6 +110,7 @@ func (s *GRPCServer) UpdateUser(ctx context.Context, req *apiv1.UpdateUserReques
 	}, nil
 }
 
+// DeleteUser deletes a user by ID.
 func (s *GRPCServer) GetUser(ctx context.Context, req *apiv1.GetUserRequest) (*apiv1.GetUserResponse, error) {
 	if err := validateID(req.Id); err != nil {
 		s.logger.Error("failed to validate id", zap.Error(err))
@@ -118,11 +125,22 @@ func (s *GRPCServer) GetUser(ctx context.Context, req *apiv1.GetUserRequest) (*a
 		s.logger.Error("failed to fetch user", zap.Error(err))
 		return nil, convertServiceError(err)
 	}
+
 	return &apiv1.GetUserResponse{
 		User: newUserResponseFromDomain(user),
 	}, nil
 }
 
+/*
+ListUsers returns a list of users.
+
+The list can be filtered by country and paginated.
+The default page size is 100. If a page size is not provided or is invalid, the default page size is used.
+The default page token points to the last ID in the list.
+If a page token is not required, but if an invalid page token is provided, an error is returned.
+
+The implementation for the pagination is based on https://cloud.google.com/apis/design/design_patterns#list_pagination
+*/
 func (s *GRPCServer) ListUsers(ctx context.Context, req *apiv1.ListUsersRequest) (*apiv1.ListUsersResponse, error) {
 	if req.PageSize <= 0 || req.PageSize > defaultPageSize {
 		req.PageSize = defaultPageSize
@@ -174,6 +192,7 @@ func (s *GRPCServer) ListUsers(ctx context.Context, req *apiv1.ListUsersRequest)
 	}, nil
 }
 
+// DeleteUser deletes a user by ID.
 func (s *GRPCServer) DeleteUser(ctx context.Context, req *apiv1.DeleteUserRequest) (*apiv1.DeleteUserResponse, error) {
 	if err := validateID(req.Id); err != nil {
 		s.logger.Error("failed to validate id", zap.Error(err))
@@ -187,10 +206,16 @@ func (s *GRPCServer) DeleteUser(ctx context.Context, req *apiv1.DeleteUserReques
 		s.logger.Error("failed to delete user", zap.Error(err))
 		return nil, convertServiceError(err)
 	}
+
 	return &apiv1.DeleteUserResponse{}, nil
 }
 
 func newUserResponseFromDomain(user *service.User) *apiv1.User {
+	// Better safe than sorry.
+	if user == nil {
+		return nil
+	}
+
 	return &apiv1.User{
 		Id:        user.ID,
 		FirstName: user.FirstName,

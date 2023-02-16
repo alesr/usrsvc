@@ -10,6 +10,8 @@ import (
 )
 
 var (
+	// Enumerate all possible errors that can be returned by the transport layer.
+
 	ErrCountryCodeInvalid  error = status.Errorf(codes.InvalidArgument, "invalid country")
 	ErrCountryCodeRequired error = status.Errorf(codes.Internal, "country is required")
 	ErrEmailFormat         error = status.Errorf(codes.Internal, "email is invalid")
@@ -28,6 +30,7 @@ var (
 	ErrUserNotFound        error = status.Errorf(codes.NotFound, "user not found")
 )
 
+// convertServiceError converts a domain layer error to a transport error.
 func convertServiceError(svcErr error) error {
 	switch {
 	case errors.Is(svcErr, service.ErrCountryCodeInvalid):
