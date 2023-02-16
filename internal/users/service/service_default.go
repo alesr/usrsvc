@@ -13,13 +13,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-const (
-	dbTimeout time.Duration = 5 * time.Second
-
-	// Enumerate user entity change events.
-	// These events are used to publish messages to a message broker.
-
-)
+const dbTimeout time.Duration = 5 * time.Second
 
 // repo is the interface that provides the repository methods
 type repo interface {
@@ -214,6 +208,7 @@ func (s *ServiceDefault) Delete(ctx context.Context, id string) error {
 	return nil
 }
 
+// CheckServiceHealth checks if the service is healthy.
 func (s *ServiceDefault) CheckServiceHealth(ctx context.Context) error {
 	ctx, cancel := context.WithTimeout(ctx, dbTimeout)
 	defer cancel()

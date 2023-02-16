@@ -109,6 +109,8 @@ func main() {
 	grpcServer.GracefulStop()
 }
 
+// Pretty much a no-op publisher just for the sake of showing
+// how we could use a real publisher in the future.
 type fakePubSub struct{}
 
 func (f *fakePubSub) Publish(event events.Event, data any) error {

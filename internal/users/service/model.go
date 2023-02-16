@@ -73,6 +73,12 @@ func (f *FilterParams) validate() error {
 	return nil
 }
 
+// PaginationParams defines the pagination parameters for a query.
+// I'm keeping them as a struct for now so when we add more parameters
+// we don't need to change the method signature.
+// The same applies to the FilterParams struct.
+// I'm also using the names "Cursor" and "Limit" instead of "page_size" and "page_token"
+// because I think they are more descriptive and less transport specific.
 type PaginationParams struct {
 	Cursor string
 	Limit  int

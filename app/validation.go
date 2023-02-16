@@ -1,3 +1,10 @@
+/*
+I could have done a more precise validation, especially
+for the first, last and nickname, but I think this is enough.
+
+Ideally, I would have used a library like https://pkg.go.dev/github.com/grpc-ecosystem/go-grpc-middleware/validator
+for validating the probuf messages, but I wanted to keep this project as simple as possible.
+*/
 package app
 
 import (
@@ -78,6 +85,8 @@ func validateName(name string) error {
 		return ErrNameRequired
 	}
 
+	// I don't think this is the best way to validate a name, but it's good enough for this project.
+	// I think go languages package have a better way to do this, or some library would do it for me.
 	for _, char := range name {
 		if !unicode.IsLetter(char) && !unicode.IsSpace(char) {
 			return ErrNameFormat
@@ -95,12 +104,14 @@ func validateEmail(email string) error {
 		return ErrEmailRequired
 	}
 
+	// I don't think this is the best way to validate an email, but it's good enough for this project.
 	if _, err := mail.ParseAddress(email); err != nil {
 		return ErrEmailFormat
 	}
 	return nil
 }
 
+// I hope this is not too cumbersome. I wanted to make sure that the password is somewhat secure.
 func validatePassword(password string) error {
 	if password == "" {
 		return ErrPasswordRequired

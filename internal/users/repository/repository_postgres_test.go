@@ -257,6 +257,10 @@ func TestUpdate(t *testing.T) {
 	})
 }
 
+// Possible these helper functions could be imported from the tests package
+// (with some refactoring) but, "A little copying is better than a little dependency".
+// https://go-proverbs.github.io/
+
 const (
 	migrationsDir      string = "../../../migrations"
 	postgresDriverName string = "postgres"
