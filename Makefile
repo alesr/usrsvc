@@ -35,12 +35,18 @@ lint: ## Run go fmt and go vet
 test-unit: ## Run unit tests
 	@go test -v -race -vet=all -count=1 -timeout 60s ./...
 
-
 .PHONY: test-it
 test-it: ## Run integration tests (requires Docker)
 	@docker-compose -f build/docker-compose.yml up -d db
 	@sleep 3 # wait for db to be ready
 	@go test -v -tags=integration -race -vet=all -count=1 -timeout 60s ./...
+	@docker-compose -f build/docker-compose.yml down
+
+.PHONY: test-e2e
+test-e2e: ## Run end-to-end tests (requires Docker)
+	@docker-compose -f build/docker-compose.yml up -d db
+	@sleep 3 # wait for db to be ready
+	@go test -v -race -vet=all -count=1 -timeout 60s ./tests/...
 	@docker-compose -f build/docker-compose.yml down
 
 .PHONY: test ## Run all tests (lint, unit and integration)

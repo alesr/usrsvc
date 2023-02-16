@@ -76,6 +76,43 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
       
-      - name: integration / end-to-end tests
+      - name: integration
         run: |
           go test -v -tags=integration -race -vet=all -count=1 -timeout 60s ./...
+
+  end-to-end-tests:
+    runs-on: ubuntu-latest
+    name: end-to-end-tests
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: usrsvc
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      
+      - name: end-to-end tests
+        run: |
+          go test -v -race -vet=all -count=1 -timeout 60s ./tests/...
