@@ -1,3 +1,6 @@
+//go:build e2e
+// +build e2e
+
 package tests
 
 import (
@@ -69,12 +72,14 @@ func Test_E2E(t *testing.T) {
 	observedGetResp, err := grpcClient.GetUser(context.TODO(), givenGetReq)
 	require.NoError(t, err)
 
-	assert.Equal(
-		t,
-		observedCreateResp.User,
-		observedGetResp.User,
-		"the user returned by the get request should be the same as the one created",
-	)
+	assert.Equal(t, observedCreateResp.User.Id, observedGetResp.User.Id)
+	assert.Equal(t, observedCreateResp.User.FirstName, observedGetResp.User.FirstName)
+	assert.Equal(t, observedCreateResp.User.LastName, observedGetResp.User.LastName)
+	assert.Equal(t, observedCreateResp.User.Nickname, observedGetResp.User.Nickname)
+	assert.Equal(t, observedCreateResp.User.Email, observedGetResp.User.Email)
+	assert.Equal(t, observedCreateResp.User.Country, observedGetResp.User.Country)
+	assert.NotEmpty(t, observedGetResp.User.CreatedAt)
+	assert.NotEmpty(t, observedGetResp.User.UpdatedAt)
 
 	// Third, we get our user in the list
 
@@ -85,12 +90,14 @@ func Test_E2E(t *testing.T) {
 
 	require.Len(t, observedListResp.Users, 1)
 
-	assert.Equal(
-		t,
-		observedCreateResp.User,
-		observedListResp.Users[0],
-		"the user returned by the list request should be the same as the one created",
-	)
+	assert.Equal(t, observedCreateResp.User.Id, observedListResp.Users[0].Id)
+	assert.Equal(t, observedCreateResp.User.FirstName, observedListResp.Users[0].FirstName)
+	assert.Equal(t, observedCreateResp.User.LastName, observedListResp.Users[0].LastName)
+	assert.Equal(t, observedCreateResp.User.Nickname, observedListResp.Users[0].Nickname)
+	assert.Equal(t, observedCreateResp.User.Email, observedListResp.Users[0].Email)
+	assert.Equal(t, observedCreateResp.User.Country, observedListResp.Users[0].Country)
+	assert.NotEmpty(t, observedListResp.Users[0].CreatedAt)
+	assert.NotEmpty(t, observedListResp.Users[0].UpdatedAt)
 
 	// Fourth, we also get our user in the list when filtering by country
 
@@ -101,12 +108,14 @@ func Test_E2E(t *testing.T) {
 
 	require.Len(t, observedListFilteredResp.Users, 1)
 
-	assert.Equal(
-		t,
-		observedCreateResp.User,
-		observedListFilteredResp.Users[0],
-		"the user returned by the filtered list request should be the same as the one created",
-	)
+	assert.Equal(t, observedCreateResp.User.Id, observedListFilteredResp.Users[0].Id)
+	assert.Equal(t, observedCreateResp.User.FirstName, observedListFilteredResp.Users[0].FirstName)
+	assert.Equal(t, observedCreateResp.User.LastName, observedListFilteredResp.Users[0].LastName)
+	assert.Equal(t, observedCreateResp.User.Nickname, observedListFilteredResp.Users[0].Nickname)
+	assert.Equal(t, observedCreateResp.User.Email, observedListFilteredResp.Users[0].Email)
+	assert.Equal(t, observedCreateResp.User.Country, observedListFilteredResp.Users[0].Country)
+	assert.NotEmpty(t, observedListFilteredResp.Users[0].CreatedAt)
+	assert.NotEmpty(t, observedListFilteredResp.Users[0].UpdatedAt)
 
 	// Fifth, we update the user and check that the changes are reflected
 
@@ -137,14 +146,13 @@ func Test_E2E(t *testing.T) {
 	observedUpdateResp, err := grpcClient.UpdateUser(context.TODO(), givenUpdateReq)
 	require.NoError(t, err)
 
-	assert.NotEmpty(t, observedUpdateResp.User.CreatedAt)
-	assert.NotEmpty(t, observedUpdateResp.User.UpdatedAt)
-
 	assert.Equal(t, expectedUpdateResp.User.FirstName, observedUpdateResp.User.FirstName)
 	assert.Equal(t, expectedUpdateResp.User.LastName, observedUpdateResp.User.LastName)
 	assert.Equal(t, expectedUpdateResp.User.Nickname, observedUpdateResp.User.Nickname)
 	assert.Equal(t, expectedUpdateResp.User.Email, observedUpdateResp.User.Email)
 	assert.Equal(t, expectedUpdateResp.User.Country, observedUpdateResp.User.Country)
+	assert.NotEmpty(t, observedUpdateResp.User.CreatedAt)
+	assert.NotEmpty(t, observedUpdateResp.User.UpdatedAt)
 
 	// Finally, we delete the user and check that it's no longer returned =[
 

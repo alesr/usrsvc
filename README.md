@@ -19,14 +19,9 @@ This command will spin up a PostgreSQL container and a container for the applica
 
 ## How to Test
 
-For code formatting, static analysis, unit and integration tests you can run the following command:
+For code formatting, static analysis, unit, integration and end-to-end tests all together you can run the following command:
 ```bash
 make test
-```
-
-For end-to-end tests you can run the following command:
-```bash
-make test-e2e
 ```
 
 For more information about the available commands, you can run the following command:
